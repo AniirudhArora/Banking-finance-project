@@ -33,7 +33,7 @@ pipeline {
       steps 
         {
           echo 'This is to build Docker Image'
-          sh 'docker build -t aniirudh/BANKandFIN-project .'
+          sh 'docker build -t aniirudh/bankandfin-project .'
         }
       }
    
