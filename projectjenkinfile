@@ -43,7 +43,7 @@ pipeline {
           echo 'This is to push Docker Image'
           withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
           sh "echo $PASS | docker login -u $USER --password-stdin"
-          sh 'docker push aniirudh/medicure-project'  
+          sh 'docker push aniirudh/bankandfin-project'  
           }
         }
     }
