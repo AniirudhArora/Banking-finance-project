@@ -36,6 +36,17 @@ pipeline {
           sh 'docker build -t aniirudh/bankandfin-project .'
         }
       }
+     stage('Logging to DOCKER HUB') 
+    {
+      steps 
+        {
+          echo 'This is to push Docker Image'
+          withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+          sh "echo $PASS | docker login -u $USER --password-stdin"
+          sh 'docker push aniirudh/medicure-project'  
+          }
+        }
+    }
    
     }
 }
