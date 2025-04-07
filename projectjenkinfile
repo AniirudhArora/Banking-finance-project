@@ -9,7 +9,7 @@ pipeline {
         stage('Git Checkout') {
             steps {
                 echo 'Cloning the Git repository'
-                git 'https://github.com/AniirudhA/Medicure-Project.git'
+                git branch: 'main', url: 'https://github.com/AniirudhA/Medicure-Project.git'
             }
         }
 
