@@ -8,58 +8,52 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                echo 'Cloning the Git repository'
-                git branch: 'main', url: 'https://github.com/AniirudhA/Medicure-Project.git'
+                echo 'This is only for cloning the Git repository'
+                git branch: 'main', url: 'https://github.com/AniirudhA/Banking-finance-project'
             }
         }
-
-        stage('Maven Package') {
+        stage('Maven Package') 
+    {
+      steps 
+        {
+          echo 'This for Packaging the application'
+          sh 'mvn package'
+        }
+    }
+    stage('Test Results') 
+    {
+      steps 
+        {
+          echo 'This for Testing the results of application'
+          publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: '/var/lib/jenkins/workspace/BANKandFINANce/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+        }
+      }
+    stage('Generating Docker Image') 
+    {
+      steps 
+        {
+          echo 'This is to build Docker Image'
+          sh 'docker build -t aniirudh/bankandfin-project .'
+        }
+      }
+     stage('Logging to DOCKER HUB') 
+    {
+      steps 
+        {
+          echo 'This is to push Docker Image'
+          withCredentials([usernamePassword(credentialsId: 'dockerhub-cred', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+          sh "echo $PASS | docker login -u $USER --password-stdin"
+          sh 'docker push aniirudh/bankandfin-project'  
+          }
+        }
+    }
+     stage('Deploy to Kubernetes') {
             steps {
-                echo 'Packaging the application'
-                sh 'mvn package'
-            }
+                    sh 'kubectl apply -f /home/ubuntu/k8s/deployment.yml'
+                    sh 'kubectl apply -f /home/ubuntu/k8s/service.yml'
+                  }
         }
-
-        stage('Test Results') {
-            steps {
-                echo 'Publishing test results'
-                publishHTML([
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: false,
-                    icon: '',
-                    keepAll: false,
-                    reportDir: 'target/surefire-reports', // relative path is safer
-                    reportFiles: 'index.html',
-                    reportName: 'HTML Report',
-                    reportTitles: '',
-                    useWrapperFileDirectly: true
-                ])
-            }
-        }
-
-        stage('Generating Docker Image') {
-            steps {
-                echo 'Building Docker image'
-                sh 'docker build -t aniirudh/medicure-project .'
-            }
-        }
-
-        stage('Logging to Docker Hub') {
-            steps {
-                echo 'Pushing Docker image to Docker Hub'
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-cre', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh 'docker push aniirudh/medicure-project'
-                }
-            }
-        }
-
-        stage('Deploy to Kubernetes') {
-            steps {
-                echo 'Deploying to Kubernetes cluster'
-                sh 'kubectl apply -f k8s/deployment.yml'
-                sh 'kubectl apply -f k8s/service.yml'
-            }
-        }
+   
+   
     }
 }
