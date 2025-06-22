@@ -13,7 +13,24 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/AniirudhA/Banking-finance-project'
             }
         }
-          
+           stage('Maven Package') 
+    {
+      steps 
+        {
+          echo 'This for Packaging the application'
+          sh 'mvn package'
+        }
+    }
+    stage('Test Results') 
+    {
+      steps 
+        {
+          echo 'This for Testing the results of application'
+          publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: '/var/lib/jenkins/workspace/BANKandFINANce/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+        }
+      }
+    
+
    
     }
 }
