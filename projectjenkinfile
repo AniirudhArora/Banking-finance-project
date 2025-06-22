@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
+                 
                 echo 'This is only for cloning the Git repository'
                 git branch: 'main', url: 'https://github.com/AniirudhA/Banking-finance-project'
             }
