@@ -29,7 +29,14 @@ pipeline {
           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: '/var/lib/jenkins/workspace/BANKandFINANCE/target/surefire-reports', reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
         }
       }
-    
+    stage('Generate Doker image')
+    {
+      steps
+        {
+          echo 'This step is for Generating Docker Image'
+         sh 'docker build -t aniirudh/bankandfin-project'
+        }
+    }
 
    
     }
